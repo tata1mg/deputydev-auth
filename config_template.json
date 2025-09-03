@@ -1,0 +1,49 @@
+{
+    "APP": {
+        "NAME": "DeputyDev Auth Service",
+        "VERSION": "1.0.0",
+        "DESCRIPTION": "DeputyDev Authentication Service",
+        "DEBUG": true,
+        "HOST": "0.0.0.0",
+        "PORT": 8000,
+        "ENVIRONMENT": "local"
+    },
+    "SUPABASE": {
+        "KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zd294ZXV6Ymh2c256ZW5ud2ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwNzQ2MzAsImV4cCI6MjA1MzY1MDYzMH0._Y3HCY1UX7OFTp5wvVfrOjQP9EvmWvfIxWJDJNA88og",
+        "URL": "https://oswoxeuzbhvsnzennwfe.supabase.co",
+        "JWT_SECRET_KEY": "87yBEqkdv9sx13K74GfdzaBZOmhB26nDStOsZ4VP+fGJcqCySJFWSG6w1GiFhyCfgzc4wuWKMYg01aMLtqfd4w=="
+    },
+    "SESSION_ENCRYPTION_PASSWORD": "e0453feef04349aebainwb717qpa14b8",
+    "BROWSER_HOST": "http://localhost:3000",
+    "FAKE_AUTH": {
+        "ENABLED": true,
+        "USER_EMAIL": "pratham.verma@1mg.com",
+        "USER_NAME": "Pratham Verma",
+        "ENCRYPTED_SESSION_DATA": "abc",
+        "FAKE_BROWSER_HOST": "www.google.com"
+    },
+    "DB_CONNECTIONS": {
+        "CONNECTIONS": {
+            "DEFAULT": {
+                "ENGINE": "tortoise.backends.asyncpg",
+                "CREDENTIALS": {
+                    "HOST": "localhost",
+                    "PORT": 5432,
+                    "USER": "postgres",
+                    "PASSWORD": "123456789",
+                    "DATABASE": "deputy_dev1"
+                }
+            }
+        },
+        "APPS": {
+            "DAO": {
+                "MODELS": [
+                    "app.main.blueprints.deputy_dev.models.dao.postgres",
+                    "app.main.blueprints.one_dev.models.dao.postgres",
+                    "app.backend_common.models.dao.postgres"
+                ],
+                "DEFAULT_CONNECTION": "default"
+            }
+        }
+    }
+}

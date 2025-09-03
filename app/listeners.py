@@ -1,15 +1,15 @@
-from tortoise.contrib.fastapi import register_tortoise
-from fastapi import FastAPI
 import logging
 
-from app.config import get_settings
+from fastapi import FastAPI
+from tortoise import Tortoise
+from tortoise.contrib.fastapi import register_tortoise
+
 
 def setup_tortoise(app: FastAPI = None) -> None:
-    settings = get_settings()
     try:
         register_tortoise(
             app,
-            config=settings.tortoise_config,
+            config={},
             generate_schemas=True,
             add_exception_handlers=True,
         )
@@ -18,8 +18,8 @@ def setup_tortoise(app: FastAPI = None) -> None:
         logging.error(f"Failed to initialize database: {e}")
         raise
 
+
 async def close_tortoise() -> None:
-    from tortoise import Tortoise
     try:
         await Tortoise.close_connections()
         logging.info("Database connections closed successfully")

@@ -1,19 +1,21 @@
 import logging
-import sys
 import signal
-from typing import NoReturn, AsyncGenerator
+import sys
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator, NoReturn
+
+from app.utils.config_manager import ConfigManager
+
+ConfigManager.initialize()
 
 import uvicorn
-
 from fastapi import FastAPI
 
-from app.config import get_settings
-from app.listeners import setup_tortoise, close_tortoise
+from app.listeners import close_tortoise, setup_tortoise
 from app.routes import __all_routes__
 
 logger = logging.getLogger(__name__)
-settings = get_settings()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
@@ -28,19 +30,17 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     await close_tortoise()
     logger.info("Service shutdown complete")
 
+
 def create_app() -> FastAPI:
     """
     Create and configure FastAPI application instance.
     """
     app = FastAPI(
-        title=settings.app.name,
-        description=settings.app.description,
-        version=settings.app.version,
-        debug=settings.app.debug,
+        title="DeputyDev Auth Service",
+        description="Authentication service for DeputyDev",
+        version="1.0.0",
+        debug=True,
         lifespan=lifespan,
-        docs_url="/docs" if settings.app.debug else None,
-        redoc_url="/redoc" if settings.app.debug else None,
-        openapi_url="/openapi.json" if settings.app.debug else None,
     )
 
     # Routes
@@ -49,12 +49,14 @@ def create_app() -> FastAPI:
 
     return app
 
+
 def signal_handler(signum: int, frame) -> NoReturn:
     """
     Graceful shutdown signal handler.
     """
     logger.info(f"Received signal {signum}, shutting down gracefully...")
     sys.exit(0)
+
 
 def main() -> None:
     """
@@ -85,6 +87,7 @@ def main() -> None:
     except Exception as e:
         logger.error(f"Failed to start service: {e}", exc_info=True)
         sys.exit(1)
+
 
 app = create_app()
 

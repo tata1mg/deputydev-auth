@@ -1,6 +1,7 @@
 from tortoise import fields
 from tortoise.models import Model
 
+
 class BaseModel(Model):
     """
     Base model class for all database models.
