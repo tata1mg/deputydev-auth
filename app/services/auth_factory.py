@@ -1,10 +1,10 @@
 from typing import Dict, Type
 
+from app.common.dataclasses.main import AuthProvider
 from app.services.base_auth import BaseAuth
 from app.services.fake_auth.fake_auth import FakeAuth
 from app.services.supabase.supabase_auth import SupabaseAuth
 from app.utils.config_manager import ConfigManager
-from app.utils.dataclasses.main import AuthProvider
 
 
 class AuthFactory:
@@ -39,7 +39,7 @@ class AuthFactory:
             AuthProvider.SUPABASE: SupabaseAuth,
             AuthProvider.FAKEAUTH: FakeAuth,
         }
-        if ConfigManager.configs["FAKE_AUTH"] and ConfigManager.configs["FAKE_AUTH"]["ENABLED"]:
+        if ConfigManager.configs()["FAKE_AUTH"] and ConfigManager.configs()["FAKE_AUTH"]["ENABLED"]:
             return FakeAuth()
 
         if auth_provider not in auth_providers:

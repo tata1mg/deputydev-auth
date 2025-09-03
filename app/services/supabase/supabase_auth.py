@@ -3,20 +3,17 @@ from datetime import datetime
 from typing import Any, Dict
 
 import jwt
-from deputydev_core.utils.config_manager import ConfigManager
-from deputydev_core.utils.constants.auth import AuthStatus
+from fastapi import Request
 from gotrue.types import AuthResponse
 from jwt import ExpiredSignatureError, InvalidTokenError
 from postgrest.exceptions import APIError
-from torpedo import Request
-from torpedo.exceptions import BadRequestException
 
-from app.backend_common.caches.auth_token_grace_period_cache import AuthTokenGracePeriod
-from app.backend_common.repository.users.user_repository import UserRepository
-from app.backend_common.services.auth.base_auth import BaseAuth
-from app.backend_common.services.auth.session_encryption_service import SessionEncryptionService
-from app.backend_common.services.auth.supabase.client import SupabaseClient
-from app.backend_common.utils.dataclasses.main import AuthSessionData, AuthTokenData, RefreshedSessionData
+from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, RefreshedSessionData
+from app.services.base_auth import BaseAuth
+from app.services.session_encryption_service import SessionEncryptionService
+from app.services.supabase.client import SupabaseClient
+from app.utils.caches.auth_token_grace_period_cache import AuthTokenGracePeriod
+from app.utils.config_manager import ConfigManager
 
 
 class SupabaseAuth(BaseAuth):
@@ -131,7 +128,7 @@ class SupabaseAuth(BaseAuth):
         """
         try:
             # Use the Supabase JWT secret key
-            jwt_secret: str = ConfigManager.configs["SUPABASE"]["JWT_SECRET_KEY"]
+            jwt_secret: str = ConfigManager.configs()["SUPABASE"]["JWT_SECRET_KEY"]
 
             if not jwt_secret:
                 return AuthTokenData(

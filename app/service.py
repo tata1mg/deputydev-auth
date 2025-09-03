@@ -1,4 +1,3 @@
-import logging
 import signal
 import sys
 from contextlib import asynccontextmanager
@@ -10,25 +9,31 @@ ConfigManager.initialize()
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.logger import logger
 
-from app.listeners import close_tortoise, setup_tortoise
+from app.listeners import close_cache, close_tortoise, setup_cache, setup_tortoise
 from app.routes import __all_routes__
-
-logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """
-    Application lifespan manager handling startup and shutdown.
-    """
     logger.info("Starting DeputyDev Auth Service...")
-    setup_tortoise(app)
-    logger.info(f"Service started successfully on {settings.app.host}:{settings.app.port}")
-    yield
-    logger.info("Shutting down DeputyDev Auth Service...")
-    await close_tortoise()
-    logger.info("Service shutdown complete")
+
+    try:
+        await setup_tortoise(app)
+        await setup_cache()
+        logger.info(
+            f"Service started successfully on {ConfigManager.configs()['APP']['HOST']}:{ConfigManager.configs()['APP']['PORT']}"
+        )
+        yield
+    finally:
+        logger.info("Shutting down DeputyDev Auth Service...")
+        try:
+            await close_cache()
+            await close_tortoise()
+        except Exception as e:
+            logger.error(f"Error during shutdown: {e}")
+        logger.info("Service shutdown complete")
 
 
 def create_app() -> FastAPI:
@@ -36,14 +41,15 @@ def create_app() -> FastAPI:
     Create and configure FastAPI application instance.
     """
     app = FastAPI(
-        title="DeputyDev Auth Service",
-        description="Authentication service for DeputyDev",
-        version="1.0.0",
-        debug=True,
+        title=ConfigManager.configs()["APP"]["NAME"],
+        description=ConfigManager.configs()["APP"]["DESCRIPTION"],
+        version=ConfigManager.configs()["APP"]["VERSION"],
+        debug=ConfigManager.configs()["APP"]["DEBUG"],
         lifespan=lifespan,
+        servers=ConfigManager.configs()["APP"]["SERVERS"],
     )
 
-    # Routes
+    # Register routes
     for route in __all_routes__:
         app.include_router(route)
 
@@ -69,13 +75,12 @@ def main() -> None:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
-        # Run Uvicorn server with or without reload (debug mode)
         uvicorn.run(
             "app.service:app",
-            host=settings.app.host,
-            port=settings.app.port,
-            reload=settings.app.debug,
-            log_level=settings.logging.level.lower(),
+            host=ConfigManager.configs()["APP"]["HOST"],
+            port=ConfigManager.configs()["APP"]["PORT"],
+            reload=ConfigManager.configs()["APP"]["DEBUG"],
+            log_level=ConfigManager.configs()["APP"]["LOG_LEVEL"],
             access_log=True,
             server_header=False,
             date_header=False,

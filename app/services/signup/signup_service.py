@@ -2,24 +2,25 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional, Tuple
 
-from deputydev_core.utils.constants.enums import Clients
-from torpedo import CONFIG
 from tortoise.exceptions import DoesNotExist
 from tortoise.transactions import in_transaction
 
-from app.backend_common.constants.onboarding import SubscriptionStatus, UserRoles
-from app.backend_common.exception.exception import SignUpError
-from app.backend_common.models.dao.postgres import Teams, Users
-from app.backend_common.models.dao.postgres.referral_codes import ReferralCodes
-from app.backend_common.models.dao.postgres.referrals import Referrals
-from app.backend_common.models.dao.postgres.subscription_plans import SubscriptionPlans
-from app.backend_common.models.dao.postgres.subscriptions import Subscriptions
-from app.backend_common.models.dao.postgres.user_teams import UserTeams
-from app.backend_common.models.dto.referral_codes_dto import ReferralCodeDTO
-from app.backend_common.models.request.onboarding import SignUpRequest
 from app.backend_common.repository.referral_codes.repository import ReferralCodesRepository
 from app.backend_common.repository.user_teams.user_team_repository import UserTeamRepository
 from app.backend_common.repository.users.user_repository import UserRepository
+from app.common.dataclasses.main import Clients, SubscriptionStatus
+from app.common.exception.exception import SignUpError
+from app.models.dao.postgres.referral_codes import ReferralCodes
+from app.models.dao.postgres.referrals import Referrals
+from app.models.dao.postgres.subscription_plans import SubscriptionPlans
+from app.models.dao.postgres.subscriptions import Subscriptions
+from app.models.dao.postgres.teams import Teams
+from app.models.dao.postgres.user_teams import UserTeams
+from app.models.dao.postgres.users import Users
+from app.models.dto.referral_codes_dto import ReferralCodeDTO
+from app.models.dto.signup_request_dto import SignUpRequest
+from app.services.signup.dataclasses.main import UserRoles
+from app.utils.config_manager import ConfigManager
 
 
 class SignUp:
@@ -133,22 +134,22 @@ class SignUp:
         domain = email.split("@")[1]
         if external_auth_client:
             if Clients(external_auth_client) == Clients.VSCODE_EXT:
-                if domain == CONFIG.config["ORG_INFO"]["TATA_1MG"]["domain"]:
+                if domain == ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["domain"]:
                     return {
-                        "team_id": CONFIG.config["ORG_INFO"]["TATA_1MG"]["team_id"],
-                        "org_name": CONFIG.config["ORG_INFO"]["TATA_1MG"]["org_name"],
+                        "team_id": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["team_id"],
+                        "org_name": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["org_name"],
                     }
 
-        if domain == CONFIG.config["ORG_INFO"]["TATA_1MG"]["domain"]:
+        if domain == ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["domain"]:
             return {
-                "team_id": CONFIG.config["ORG_INFO"]["TATA_1MG"]["team_id"],
-                "org_name": CONFIG.config["ORG_INFO"]["TATA_1MG"]["org_name"],
+                "team_id": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["team_id"],
+                "org_name": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["org_name"],
             }
 
-        elif email in CONFIG.config["ALLOWED_EMAILS"]:
+        elif email in ConfigManager.configs()["ALLOWED_EMAILS"]:
             return {
-                "team_id": CONFIG.config["ORG_INFO"]["DEPUTYDEV_PRIVATE"]["team_id"],
-                "org_name": CONFIG.config["ORG_INFO"]["DEPUTYDEV_PRIVATE"]["org_name"],
+                "team_id": ConfigManager.configs()["ORG_INFO"]["DEPUTYDEV_PRIVATE"]["team_id"],
+                "org_name": ConfigManager.configs()["ORG_INFO"]["DEPUTYDEV_PRIVATE"]["org_name"],
             }
         else:
             return await cls.get_personal_team_info_from_email(email)

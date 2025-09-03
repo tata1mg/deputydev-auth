@@ -1,8 +1,10 @@
-from typing import Any, Dict
+from typing import Dict
 
+from fastapi import Request
+
+from app.common.dataclasses.main import AuthSessionData, AuthStatus
 from app.services.base_auth import BaseAuth
 from app.utils.config_manager import ConfigManager
-from app.utils.dataclasses.main import AuthSessionData, AuthStatus
 
 
 class FakeAuth(BaseAuth):
@@ -14,7 +16,7 @@ class FakeAuth(BaseAuth):
             encrypted_session_data=ConfigManager.configs()["FAKE_AUTH"]["ENCRYPTED_SESSION_DATA"],
         )
 
-    async def extract_and_verify_token(self, request: Dict[str, Any]) -> AuthSessionData:
+    async def extract_and_verify_token(self, request: Request) -> AuthSessionData:
         return AuthSessionData(
             status=AuthStatus.VERIFIED,
             user_email=ConfigManager.configs()["FAKE_AUTH"]["USER_EMAIL"],

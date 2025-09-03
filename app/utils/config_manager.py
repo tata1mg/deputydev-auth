@@ -49,6 +49,5 @@ class ConfigManager(metaclass=Singleton):
                 pass
 
     @classmethod
-    @property
     def configs(cls) -> Dict[str, Any]:
         return cls.config

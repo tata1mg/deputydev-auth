@@ -6,7 +6,15 @@
         "DEBUG": true,
         "HOST": "0.0.0.0",
         "PORT": 8000,
-        "ENVIRONMENT": "local"
+        "ENVIRONMENT": "local",
+        "LOG_LEVEL": "info"
+    },
+    "REDIS_CACHE_HOSTS": {
+        "genai": {
+            "LABEL": "global",
+            "REDIS_HOST": "127.0.0.1",
+            "REDIS_PORT": 6379
+        }
     },
     "SUPABASE": {
         "KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zd294ZXV6Ymh2c256ZW5ud2ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwNzQ2MzAsImV4cCI6MjA1MzY1MDYzMH0._Y3HCY1UX7OFTp5wvVfrOjQP9EvmWvfIxWJDJNA88og",
@@ -23,26 +31,24 @@
         "FAKE_BROWSER_HOST": "www.google.com"
     },
     "DB_CONNECTIONS": {
-        "CONNECTIONS": {
-            "DEFAULT": {
-                "ENGINE": "tortoise.backends.asyncpg",
-                "CREDENTIALS": {
-                    "HOST": "localhost",
-                    "PORT": 5432,
-                    "USER": "postgres",
-                    "PASSWORD": "123456789",
-                    "DATABASE": "deputy_dev1"
+        "connections": {
+            "default": {
+                "engine": "tortoise.backends.asyncpg",
+                "credentials": {
+                    "host": "localhost",
+                    "port": 5432,
+                    "user": "postgres",
+                    "password": "123456789",
+                    "database": "deputy_dev1"
                 }
             }
         },
-        "APPS": {
-            "DAO": {
-                "MODELS": [
-                    "app.main.blueprints.deputy_dev.models.dao.postgres",
-                    "app.main.blueprints.one_dev.models.dao.postgres",
-                    "app.backend_common.models.dao.postgres"
+        "apps": {
+            "dao": {
+                "models": [
+                    "app.models.dao.postgres"
                 ],
-                "DEFAULT_CONNECTION": "default"
+                "default_connection": "default"
             }
         }
     }

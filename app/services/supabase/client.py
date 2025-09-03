@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 
 from supabase import Client, create_client
 from supabase.lib.client_options import SyncClientOptions
-from torpedo import CONFIG
+
+from app.utils.config_manager import ConfigManager
 
 if TYPE_CHECKING:
     from supabase._sync.client import SyncClient
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
 
 class SupabaseClient:
     _instance: Client = None
-    supabase = CONFIG.config["SUPABASE"]
+    supabase = ConfigManager.configs()["SUPABASE"]
 
     @classmethod
     def get_instance(cls) -> "SyncClient":

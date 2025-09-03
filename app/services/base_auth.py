@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
-from app.utils.dataclasses.main import AuthSessionData
+from app.common.dataclasses.main import AuthSessionData
 
 
 class BaseAuth(ABC):

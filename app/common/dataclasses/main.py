@@ -4,6 +4,15 @@ from typing import Optional
 from pydantic import BaseModel
 
 
+class Clients(Enum):
+    CLI = "CLI"
+    BACKEND = "BACKEND"
+    VSCODE_EXT = "VSCODE_EXT"
+    BINARY = "BINARY"
+    WEB = "WEB"
+    PR_REVIEW = "REVIEW"
+
+
 class AuthStatus(Enum):
     VERIFIED = "VERIFIED"
     NOT_VERIFIED = "NOT_VERIFIED"
@@ -41,3 +50,9 @@ class RefreshedSessionData(BaseModel):
     refreshed_session: Optional[str] = None
     user_email: Optional[str] = None
     user_name: Optional[str] = None
+
+
+class SubscriptionStatus(Enum):
+    ACTIVE = "ACTIVE"
+    PAUSED = "PAUSED"
+    CANCELLED = "CANCELLED"
