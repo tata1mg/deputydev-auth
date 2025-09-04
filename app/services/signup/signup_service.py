@@ -5,9 +5,6 @@ from typing import Any, Dict, Optional, Tuple
 from tortoise.exceptions import DoesNotExist
 from tortoise.transactions import in_transaction
 
-from app.backend_common.repository.referral_codes.repository import ReferralCodesRepository
-from app.backend_common.repository.user_teams.user_team_repository import UserTeamRepository
-from app.backend_common.repository.users.user_repository import UserRepository
 from app.common.dataclasses.main import Clients, SubscriptionStatus
 from app.common.exception.exception import SignUpError
 from app.models.dao.postgres.referral_codes import ReferralCodes
@@ -19,6 +16,9 @@ from app.models.dao.postgres.user_teams import UserTeams
 from app.models.dao.postgres.users import Users
 from app.models.dto.referral_codes_dto import ReferralCodeDTO
 from app.models.dto.signup_request_dto import SignUpRequest
+from app.repository.referral_codes.referral_codes_repository import ReferralCodesRepository
+from app.repository.user_teams.user_team_repository import UserTeamRepository
+from app.repository.users.user_repository import UserRepository
 from app.services.signup.dataclasses.main import UserRoles
 from app.utils.config_manager import ConfigManager
 

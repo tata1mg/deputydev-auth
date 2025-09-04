@@ -1,3 +1,5 @@
+from typing import Any, Optional
+
 import redis.asyncio as redis
 
 from app.utils.config_manager import ConfigManager
@@ -26,14 +28,14 @@ class Base:
         return cls._redis
 
     @classmethod
-    async def set(cls, key: str, value, ex: int | None = None) -> None:
+    async def set(cls, key: str, value: Any, ex: int | None = None) -> None:
         """Set a value in Redis with optional expiration."""
         redis_key = cls._make_key(key)
         redis_client = await cls.get_redis_client()
         await redis_client.set(redis_key, value, ex=ex or cls._expire_in_sec)
 
     @classmethod
-    async def get(cls, key: str):
+    async def get(cls, key: str) -> Optional[str]:
         """Get a value from Redis."""
         redis_key = cls._make_key(key)
         redis_client = await cls.get_redis_client()

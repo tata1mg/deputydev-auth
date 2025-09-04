@@ -14,17 +14,17 @@ service_health_checker_route = APIRouter()
 )
 async def ping() -> JSONResponse:
     pong = Pong()
-    return pong.get_message()
+    return JSONResponse(pong.get_message())
 
 
 @service_health_checker_route.get(
     "/health/db", summary="Database Health Check", description="Checks if the database connection is alive"
 )
-async def db_health_check():
+async def db_health_check() -> JSONResponse:
     try:
         conn = Tortoise.get_connection("default")
         await conn.execute_query("SELECT 1")
-        return {"status": "ok"}
+        return JSONResponse({"status": "ok"})
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -35,7 +35,7 @@ async def db_health_check():
 @service_health_checker_route.get(
     "/health/redis", summary="Redis Health Check", description="Checks if the Redis connection is alive"
 )
-async def redis_health_check():
+async def redis_health_check() -> JSONResponse:
     from app.listeners import redis_client
 
     if not redis_client:
@@ -58,9 +58,11 @@ async def redis_health_check():
         if value != test_value:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Redis test value mismatch")
 
-        return {
-            "status": "ok",
-        }
+        return JSONResponse(
+            {
+                "status": "ok",
+            }
+        )
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=f"Redis operation failed: {str(e)}")

@@ -9,11 +9,12 @@ from jwt import ExpiredSignatureError, InvalidTokenError
 from postgrest.exceptions import APIError
 
 from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, RefreshedSessionData
+from app.repository.users.user_repository import UserRepository
 from app.services.base_auth import BaseAuth
-from app.services.session_encryption_service import SessionEncryptionService
 from app.services.supabase.client import SupabaseClient
 from app.utils.caches.auth_token_grace_period_cache import AuthTokenGracePeriod
 from app.utils.config_manager import ConfigManager
+from app.utils.session_encryption_service import SessionEncryptionService
 
 
 class SupabaseAuth(BaseAuth):
@@ -137,7 +138,7 @@ class SupabaseAuth(BaseAuth):
                 )
 
             # Decode and verify the JWT
-            decoded_token = jwt.decode(
+            decoded_token: Dict[str, Any] = jwt.decode(
                 access_token,
                 key=jwt_secret,
                 algorithms=["HS256"],
@@ -169,8 +170,8 @@ class SupabaseAuth(BaseAuth):
             raise jwt.ExpiredSignatureError("The token has expired.")
         except jwt.InvalidTokenError:
             raise jwt.InvalidTokenError("Invalid token.")
-        except Exception as e:  # noqa: BLE001
-            raise Exception(f"Token validation failed: {str(e)}")
+        except Exception as e:
+            raise ValueError(f"Token validation failed: {str(e)}")
 
     async def is_grace_period_available(self, access_token: str) -> bool:
         """Check if a grace period is available for the given access token.
@@ -211,14 +212,14 @@ class SupabaseAuth(BaseAuth):
             response: AuthResponse = self.supabase.auth.refresh_session(session_data.get("refresh_token"))
 
             if not response.session or not response.user:
-                raise Exception("Failed to refresh tokens.")
+                raise ValueError("Failed to refresh tokens.")
 
             # extracting email and user name
             user_email = response.user.email
             user_name: str = response.user.user_metadata["full_name"]
 
             if not user_email or not user_name:
-                raise Exception("User email or name is missing in the response.")
+                raise ValueError("User email or name is missing in the response.")
 
             # update the session data with the refreshed access and refresh tokens
             session_data["access_token"] = response.session.access_token
@@ -227,8 +228,8 @@ class SupabaseAuth(BaseAuth):
             # return the refreshed session data
             refreshed_session = SessionEncryptionService.encrypt(json.dumps(session_data))
             return RefreshedSessionData(refreshed_session=refreshed_session, user_email=user_email, user_name=user_name)
-        except Exception as e:  # noqa: BLE001
-            raise Exception(f"Error refreshing session: {str(e)}")
+        except Exception as e:
+            raise ValueError(f"Error refreshing session: {str(e)}")
 
     async def validate_session(
         self, encrypted_session_data: str, use_grace_period: bool = False, enable_grace_period: bool = False
@@ -278,7 +279,7 @@ class SupabaseAuth(BaseAuth):
                     user_email=refreshed_session_data.user_email,
                     user_name=refreshed_session_data.user_name,
                 )
-            except Exception as _ex:  # noqa: BLE001
+            except Exception as _ex:
                 return AuthSessionData(
                     status=AuthStatus.NOT_VERIFIED,
                     error_message=str(_ex),
@@ -289,7 +290,7 @@ class SupabaseAuth(BaseAuth):
                 status=AuthStatus.NOT_VERIFIED,
                 error_message="Invalid token format.",
             )
-        except Exception as _ex:  # noqa: BLE001
+        except Exception as _ex:
             return AuthSessionData(
                 status=AuthStatus.NOT_VERIFIED,
                 error_message=str(_ex),
@@ -305,7 +306,7 @@ class SupabaseAuth(BaseAuth):
             AuthSessionData with verification results.
 
         Raises:
-            BadRequestException: If Authorization header is missing.
+            Exception: If Authorization header is missing.
         """
         use_grace_period: bool = False
         enable_grace_period: bool = False
@@ -313,13 +314,13 @@ class SupabaseAuth(BaseAuth):
 
         authorization_header: str = request.headers.get("Authorization")
         if not authorization_header:
-            raise BadRequestException("Authorization header is missing")
+            raise ValueError("Authorization header is missing")
 
         try:
-            payload = request.custom_json() if request.method == "POST" else request.request_params()
+            payload = request.json() if request.method == "POST" else request.query_params()
             use_grace_period = payload.get("use_grace_period") or False
             enable_grace_period = payload.get("enable_grace_period") or False
-        except Exception:  # noqa: BLE001
+        except Exception:
             pass
 
         # decode encrypted session data and get the supabase access token

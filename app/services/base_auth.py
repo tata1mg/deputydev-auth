@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict
+from typing import Dict
+
+from fastapi import Request
 
 from app.common.dataclasses.main import AuthSessionData
 
@@ -31,7 +33,7 @@ class BaseAuth(ABC):
         raise NotImplementedError("This get_auth_session method must be implemented in the child class")
 
     @abstractmethod
-    async def extract_and_verify_token(self, request: Dict[str, Any]) -> AuthSessionData:
+    async def extract_and_verify_token(self, request: Request) -> AuthSessionData:
         """Extract and validate an authentication token from the request.
 
         Args:

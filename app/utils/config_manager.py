@@ -23,7 +23,7 @@ class ConfigManager(metaclass=Singleton):
         return config
 
     @classmethod
-    def initialize(cls, config_path: str = "./config.json", in_memory: bool = False):
+    def initialize(cls, config_path: str = "./config.json", in_memory: bool = False) -> None:
         cls.config_path = config_path
         if in_memory:
             cls.in_memory = True
@@ -39,7 +39,7 @@ class ConfigManager(metaclass=Singleton):
         return cls.config.get(key, default)
 
     @classmethod
-    def set(cls, values: Dict[str, Any]):
+    def set(cls, values: Dict[str, Any]) -> None:
         cls.config.update(values)
         if not cls.in_memory:
             try:
