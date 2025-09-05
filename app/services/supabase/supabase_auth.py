@@ -8,11 +8,11 @@ from gotrue.types import AuthResponse
 from jwt import ExpiredSignatureError, InvalidTokenError
 from postgrest.exceptions import APIError
 
+from app.caches.auth_token_cache.auth_token_grace_period_cache import AuthTokenGracePeriod
+from app.clients.supabase.client import SupabaseClient
 from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, RefreshedSessionData
 from app.repository.users.user_repository import UserRepository
 from app.services.base_auth import BaseAuth
-from app.services.supabase.client import SupabaseClient
-from app.utils.caches.auth_token_grace_period_cache import AuthTokenGracePeriod
 from app.utils.config_manager import ConfigManager
 from app.utils.session_encryption_service import SessionEncryptionService
 
