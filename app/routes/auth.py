@@ -16,7 +16,6 @@ async def get_auth_data(_request: Request) -> JSONResponse:
 
 @auth_route.get("/get-session", summary="Get session endpoint", description="Returns session data")
 async def get_session(_request: Request) -> JSONResponse:
-    print("In get session")
     headers = _request.headers
     auth_provider = AuthFactory.get_auth_provider()
     response = await auth_provider.get_auth_session(headers)
@@ -32,7 +31,6 @@ async def sign_up(_request: Request) -> JSONResponse:
 
 @auth_route.post("/verify-auth-token", summary="Verify auth token endpoint", description="Verify auth token")
 async def verify_auth_token(_request: Request) -> JSONResponse:
-    print("In verify auth token")
     auth_provider = AuthFactory.get_auth_provider()
     response = await auth_provider.extract_and_verify_token(_request)
     return JSONResponse(response.model_dump(mode="json"))
