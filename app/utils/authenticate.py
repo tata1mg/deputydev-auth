@@ -8,8 +8,8 @@ from app.models.dto.user_team_dto import UserTeamDTO
 from app.repository.subscriptions.subscriptions_repository import SubscriptionsRepository
 from app.repository.user_teams.user_team_repository import UserTeamRepository
 from app.repository.users.user_repository import UserRepository
-from app.services.auth_factory import AuthFactory
-from app.services.signup.signup_service import SignUp
+from app.services.auth.auth_factory import AuthFactory
+from app.services.auth.signup.signup_service import SignUp
 
 
 async def get_auth_data(request: Request) -> Dict[str, Union[AuthData, Dict[str, Any]]]:

@@ -7,8 +7,8 @@ from app.utils.config_manager import ConfigManager
 
 class Base:
     _service_prefix: str = "genai"
-    _host: str = ConfigManager.configs()["REDIS_CACHE_HOSTS"]["genai"]["REDIS_HOST"]
-    _port: int = ConfigManager.configs()["REDIS_CACHE_HOSTS"]["genai"]["REDIS_PORT"]
+    _host: str = ConfigManager.configs()["REDIS"]["HOST"]
+    _port: int = ConfigManager.configs()["REDIS"]["PORT"]
     _key_prefix: str = ""
     _expire_in_sec: int = 3600  # default 1 hour
 
