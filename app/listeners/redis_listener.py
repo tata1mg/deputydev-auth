@@ -2,7 +2,7 @@ import redis.asyncio as redis
 from fastapi import FastAPI
 from redis.exceptions import RedisError
 
-from app.listeners.base import BaseListener
+from app.listeners.base_listener import BaseListener
 from app.utils.config_manager import ConfigManager
 
 

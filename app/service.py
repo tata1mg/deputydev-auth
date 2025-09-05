@@ -10,13 +10,8 @@ ConfigManager.initialize()
 import uvicorn
 from fastapi import FastAPI
 from fastapi.logger import logger
-
-from app.listeners import RedisListener, TortoiseListener
+from app.listeners.base_listener import setup_all_listeners, close_all_listeners
 from app.routes import __all_routes__
-
-# Global listener instances
-tortoise_listener = TortoiseListener()
-redis_listener = RedisListener()
 
 
 @asynccontextmanager
@@ -25,8 +20,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     try:
         # Initialize listeners
-        await tortoise_listener.setup(app)
-        await redis_listener.setup(app)
+        await setup_all_listeners(app)
 
         logger.info(
             f"Service started successfully on {ConfigManager.configs()['APP']['HOST']}:{ConfigManager.configs()['APP']['PORT']}"
@@ -36,8 +30,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         logger.info("Shutting down DeputyDev Auth Service...")
         try:
             # Close listeners in reverse order
-            await redis_listener.close()
-            await tortoise_listener.close()
+            await close_all_listeners()
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
         logger.info("Service shutdown complete")
