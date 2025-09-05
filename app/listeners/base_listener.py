@@ -1,8 +1,11 @@
 from typing import List
+
 from fastapi import FastAPI
+
 
 class BaseListener:
     """Base listener class that all listeners should inherit from."""
+
     def __init__(self):
         register_listener(self)
 
@@ -14,13 +17,16 @@ class BaseListener:
         """Cleanup resources used by the listener."""
         raise NotImplementedError
 
+
 # Module-level list to store all listener instances
 _listeners: List[BaseListener] = []
+
 
 def register_listener(listener: BaseListener) -> None:
     """Register a listener instance."""
     if listener not in _listeners:
         _listeners.append(listener)
+
 
 async def setup_all_listeners(app: FastAPI) -> None:
     """
@@ -37,6 +43,7 @@ async def setup_all_listeners(app: FastAPI) -> None:
             await close_all_listeners()
             raise RuntimeError(f"Failed to initialize listener {listener.__class__.__name__}: {str(e)}")
 
+
 async def close_all_listeners() -> None:
     """
     Close all registered listeners in reverse order of initialization.
@@ -47,6 +54,7 @@ async def close_all_listeners() -> None:
         except Exception as e:
             # Log the error but continue closing other listeners
             print(f"Error closing listener {listener.__class__.__name__}: {str(e)}")
+
 
 def get_all_listeners() -> List[BaseListener]:
     """

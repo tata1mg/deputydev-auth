@@ -10,7 +10,8 @@ ConfigManager.initialize()
 import uvicorn
 from fastapi import FastAPI
 from fastapi.logger import logger
-from app.listeners.base_listener import setup_all_listeners, close_all_listeners
+
+from app.listeners.base_listener import close_all_listeners, setup_all_listeners
 from app.routes import __all_routes__
 
 

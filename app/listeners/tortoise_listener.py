@@ -6,8 +6,10 @@ from tortoise.exceptions import DBConnectionError
 from app.listeners.base_listener import BaseListener
 from app.utils.config_manager import ConfigManager
 
+
 class TortoiseListener(BaseListener):
     """Listener for Tortoise ORM database connections."""
+
     _host: str = ConfigManager.configs()["DB_CREDENTIALS"]["HOST"]
     _port: int = ConfigManager.configs()["DB_CREDENTIALS"]["PORT"]
     _user: str = ConfigManager.configs()["DB_CREDENTIALS"]["USER"]
@@ -24,17 +26,10 @@ class TortoiseListener(BaseListener):
                     "user": _user,
                     "password": _password,
                     "database": _database,
-                }
+                },
             }
         },
-        "apps": {
-            "dao": {
-                "models": [
-                    "app.models.dao.postgres"
-                ],
-                "default_connection": "default"
-            }
-        }
+        "apps": {"dao": {"models": ["app.models.dao.postgres"], "default_connection": "default"}},
     }
 
     async def setup(self, app: FastAPI) -> None:
