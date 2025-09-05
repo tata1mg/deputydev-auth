@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from fastapi import FastAPI
+
 
 class BaseListener(ABC):
     """Base class for all service listeners."""

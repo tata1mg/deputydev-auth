@@ -36,4 +36,3 @@ class TortoiseListener(BaseListener):
             await Tortoise.close_connections()
         except Exception as e:
             raise DBConnectionError(f"Error closing database connections: {str(e)}")
-

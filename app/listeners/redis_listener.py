@@ -1,5 +1,5 @@
-from fastapi import FastAPI
 import redis.asyncio as redis
+from fastapi import FastAPI
 from redis.exceptions import RedisError
 
 from app.listeners.base import BaseListener
@@ -8,6 +8,7 @@ from app.utils.config_manager import ConfigManager
 
 class RedisListener(BaseListener):
     """Listener for Redis cache connections."""
+
     _host: str = ConfigManager.configs()["REDIS"]["HOST"]
     _port: int = ConfigManager.configs()["REDIS"]["PORT"]
 
@@ -40,5 +41,3 @@ class RedisListener(BaseListener):
                 raise RedisError(f"Error closing Redis connection: {str(e)}")
             finally:
                 self._client = None
-
-

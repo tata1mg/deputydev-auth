@@ -10,9 +10,9 @@ ConfigManager.initialize()
 import uvicorn
 from fastapi import FastAPI
 from fastapi.logger import logger
+
 from app.listeners import RedisListener, TortoiseListener
 from app.routes import __all_routes__
-
 
 # Global listener instances
 tortoise_listener = TortoiseListener()
