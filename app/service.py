@@ -3,15 +3,16 @@ import sys
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, NoReturn
 
+from app.utils.config_manager import ConfigManager
+
+ConfigManager.initialize()
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.logger import logger
 
 from app.listeners import close_cache, close_tortoise, setup_cache, setup_tortoise
 from app.routes import __all_routes__
-from app.utils.config_manager import ConfigManager
-
-ConfigManager.initialize()
 
 
 @asynccontextmanager

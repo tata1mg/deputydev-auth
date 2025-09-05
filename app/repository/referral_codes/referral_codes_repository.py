@@ -12,7 +12,7 @@ class ReferralCodesRepository:
         try:
             filters = {"referral_code": referral_code}
             referral_code = await ReferralCodes.get_or_none(**filters)
-            return ReferralCodeDTO.model_validate(referral_code) if referral_code else None
+            return ReferralCodeDTO.model_validate(referral_code.__dict__) if referral_code else None
         except Exception as ex:
             logger.error(f"Error occurred while fetching referral code from db with filters: {filters}", exc_info=True)
             raise ex

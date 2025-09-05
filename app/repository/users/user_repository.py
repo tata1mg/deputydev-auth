@@ -15,10 +15,10 @@ class UserRepository:
         try:
             if fetch_one:
                 user = await Users.get_or_none(**filters)
-                return UserDTO.model_validate(user) if user else None
+                return UserDTO.model_validate(user.__dict__) if user else None
             else:
                 users = await Users.filter(**filters).all()
-                return [UserDTO.model_validate(user) for user in users]
+                return [UserDTO.model_validate(user.__dict__) for user in users]
 
         except Exception as ex:
             logger.error(f"Error occurred while fetching user(s) from db with filters: {filters}", exc_info=True)

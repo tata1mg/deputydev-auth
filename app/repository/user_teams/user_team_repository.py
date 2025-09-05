@@ -14,10 +14,10 @@ class UserTeamRepository:
         try:
             if fetch_one:
                 user_team = await UserTeams.get_or_none(**filters)
-                return UserTeamDTO.model_validate(user_team) if user_team else None
+                return UserTeamDTO.model_validate(user_team.__dict__) if user_team else None
             else:
                 user_teams = await UserTeams.filter(**filters).all()
-                return [UserTeamDTO.model_validate(user_team) for user_team in user_teams]
+                return [UserTeamDTO.model_validate(user_team.__dict__) for user_team in user_teams]
 
         except Exception as ex:
             logger.error(

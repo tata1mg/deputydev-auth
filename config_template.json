@@ -4,10 +4,16 @@
         "VERSION": "1.0.0",
         "DESCRIPTION": "DeputyDev Authentication Service",
         "DEBUG": true,
-        "HOST": "0.0.0.0",
-        "PORT": 8000,
+        "HOST": "127.0.0.1",
+        "PORT": 8085,
+        "LOG_LEVEL": "info",
         "ENVIRONMENT": "local",
-        "LOG_LEVEL": "info"
+        "SERVERS": [
+            {
+                "url": "http://localhost:8085",
+                "description": "Local Development Server"
+            }
+        ]
     },
     "REDIS_CACHE_HOSTS": {
         "genai": {
@@ -21,10 +27,11 @@
         "URL": "https://oswoxeuzbhvsnzennwfe.supabase.co",
         "JWT_SECRET_KEY": "87yBEqkdv9sx13K74GfdzaBZOmhB26nDStOsZ4VP+fGJcqCySJFWSG6w1GiFhyCfgzc4wuWKMYg01aMLtqfd4w=="
     },
+    "ENCRYPTION_PASSWORD": "e0453feef04349aebe68447179a264b5",
     "SESSION_ENCRYPTION_PASSWORD": "e0453feef04349aebainwb717qpa14b8",
     "BROWSER_HOST": "http://localhost:3000",
     "FAKE_AUTH": {
-        "ENABLED": true,
+        "ENABLED": false,
         "USER_EMAIL": "pratham.verma@1mg.com",
         "USER_NAME": "Pratham Verma",
         "ENCRYPTED_SESSION_DATA": "abc",
@@ -50,6 +57,18 @@
                 ],
                 "default_connection": "default"
             }
+        }
+    },
+    "ORG_INFO": {
+        "TATA_1MG": {
+            "domain": "1mg.com",
+            "org_name": "TATA 1mg",
+            "team_id": 1
+        },
+        "TRAYA": {
+            "domain": "traya.com",
+            "org_name": "Traya",
+            "team_id": 3
         }
     }
 }
