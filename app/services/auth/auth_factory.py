@@ -1,9 +1,9 @@
 from typing import Dict, Type
 
 from app.common.dataclasses.main import AuthProvider
-from app.services.base_auth import BaseAuth
-from app.services.fake_auth.fake_auth import FakeAuth
-from app.services.supabase.supabase_auth import SupabaseAuth
+from app.services.auth.base_auth import BaseAuth
+from app.services.auth.fake_auth.fake_auth import FakeAuth
+from app.services.auth.supabase.supabase_auth import SupabaseAuth
 from app.utils.config_manager import ConfigManager
 
 

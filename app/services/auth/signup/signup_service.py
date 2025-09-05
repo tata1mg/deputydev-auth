@@ -19,7 +19,7 @@ from app.models.dto.signup_request_dto import SignUpRequest
 from app.repository.referral_codes.referral_codes_repository import ReferralCodesRepository
 from app.repository.user_teams.user_team_repository import UserTeamRepository
 from app.repository.users.user_repository import UserRepository
-from app.services.signup.dataclasses.main import UserRoles
+from app.services.auth.signup.dataclasses.main import UserRoles
 from app.utils.config_manager import ConfigManager
 
 

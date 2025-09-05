@@ -3,7 +3,7 @@ from typing import Dict
 from fastapi import Request
 
 from app.common.dataclasses.main import AuthSessionData, AuthStatus
-from app.services.base_auth import BaseAuth
+from app.services.auth.base_auth import BaseAuth
 from app.utils.config_manager import ConfigManager
 
 
