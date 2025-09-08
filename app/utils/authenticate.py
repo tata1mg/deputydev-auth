@@ -3,7 +3,7 @@ from typing import Any, Dict, Union
 
 from fastapi import Request
 
-from app.common.dataclasses.main import AuthData, AuthSessionData, AuthStatus, SubscriptionStatus
+from app.common.dataclasses.main import AuthData, AuthSessionData, AuthStatus, SubscriptionStatus, GraceConfig
 from app.models.dto.user_team_dto import UserTeamDTO
 from app.repository.subscriptions.subscriptions_repository import SubscriptionsRepository
 from app.repository.user_teams.user_team_repository import UserTeamRepository
@@ -12,13 +12,13 @@ from app.services.auth.auth_factory import AuthFactory
 from app.services.auth.signup.signup_service import SignUp
 
 
-async def get_auth_data(request: Request) -> Dict[str, Union[AuthData, Dict[str, Any]]]:
+async def get_auth_data(grace_config: GraceConfig, headers: Dict[str, str]) -> Dict[str, Union[AuthData, Dict[str, Any]]]:
     """
     Get the auth data from the request
     """
     response_headers = {}
     auth_provider = AuthFactory.get_auth_provider()
-    verification_result: AuthSessionData = await auth_provider.extract_and_verify_token(request)
+    verification_result: AuthSessionData = await auth_provider.extract_and_verify_token(grace_config, headers=headers)
 
     if verification_result.status == AuthStatus.NOT_VERIFIED:
         raise Exception(verification_result.error_message or AuthStatus.NOT_VERIFIED.value)

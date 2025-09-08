@@ -1,8 +1,6 @@
 from typing import Dict
 
-from fastapi import Request
-
-from app.common.dataclasses.main import AuthSessionData, AuthStatus
+from app.common.dataclasses.main import AuthSessionData, AuthStatus, GraceConfig
 from app.services.auth.base_auth import BaseAuth
 from app.utils.config_manager import ConfigManager
 
@@ -16,7 +14,7 @@ class FakeAuth(BaseAuth):
             encrypted_session_data=ConfigManager.configs()["FAKE_AUTH"]["ENCRYPTED_SESSION_DATA"],
         )
 
-    async def extract_and_verify_token(self, request: Request) -> AuthSessionData:
+    async def extract_and_verify_token(self, grace_config: GraceConfig, headers: Dict[str, str]) -> AuthSessionData:
         return AuthSessionData(
             status=AuthStatus.VERIFIED,
             user_email=ConfigManager.configs()["FAKE_AUTH"]["USER_EMAIL"],

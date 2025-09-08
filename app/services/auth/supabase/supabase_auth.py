@@ -10,7 +10,7 @@ from postgrest.exceptions import APIError
 
 from app.caches.auth_token_cache.auth_token_grace_period_cache import AuthTokenGracePeriod
 from app.clients.supabase.client import SupabaseClient
-from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, RefreshedSessionData
+from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, RefreshedSessionData, GraceConfig
 from app.repository.users.user_repository import UserRepository
 from app.services.auth.base_auth import BaseAuth
 from app.utils.config_manager import ConfigManager
@@ -296,7 +296,7 @@ class SupabaseAuth(BaseAuth):
                 error_message=str(_ex),
             )
 
-    async def extract_and_verify_token(self, request: Request) -> AuthSessionData:
+    async def extract_and_verify_token(self, grace_config: GraceConfig, headers: Dict[str, str]) -> AuthSessionData:
         """Extract and verify authentication token from the request.
 
         Args:
@@ -308,18 +308,15 @@ class SupabaseAuth(BaseAuth):
         Raises:
             Exception: If Authorization header is missing.
         """
-        use_grace_period: bool = False
-        enable_grace_period: bool = False
-        payload: Dict[str, Any] = {}
-
-        authorization_header: str = request.headers.get("Authorization")
+        use_grace_period = False
+        enable_grace_period = False
+        authorization_header: str = headers.get("Authorization")
         if not authorization_header:
             raise ValueError("Authorization header is missing")
 
         try:
-            payload = request.json() if request.method == "POST" else request.query_params()
-            use_grace_period = payload.get("use_grace_period") or False
-            enable_grace_period = payload.get("enable_grace_period") or False
+            use_grace_period = grace_config.use_grace_period or False
+            enable_grace_period = grace_config.enable_grace_period or False
         except Exception:
             pass
 
