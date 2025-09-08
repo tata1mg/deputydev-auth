@@ -57,6 +57,7 @@ class SubscriptionStatus(Enum):
     PAUSED = "PAUSED"
     CANCELLED = "CANCELLED"
 
+
 class GraceConfig(BaseModel):
     use_grace_period: bool
     enable_grace_period: bool

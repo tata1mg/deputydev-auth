@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
+
 from app.services.auth.auth_factory import AuthFactory
 from app.services.auth.signup.signup_service import SignUp
 from app.utils import authenticate

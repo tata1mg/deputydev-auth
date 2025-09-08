@@ -3,14 +3,13 @@ from datetime import datetime
 from typing import Any, Dict
 
 import jwt
-from fastapi import Request
 from gotrue.types import AuthResponse
 from jwt import ExpiredSignatureError, InvalidTokenError
 from postgrest.exceptions import APIError
 
 from app.caches.auth_token_cache.auth_token_grace_period_cache import AuthTokenGracePeriod
 from app.clients.supabase.client import SupabaseClient
-from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, RefreshedSessionData, GraceConfig
+from app.common.dataclasses.main import AuthSessionData, AuthStatus, AuthTokenData, GraceConfig, RefreshedSessionData
 from app.repository.users.user_repository import UserRepository
 from app.services.auth.base_auth import BaseAuth
 from app.utils.config_manager import ConfigManager

@@ -1,9 +1,7 @@
 from datetime import datetime, timezone
 from typing import Any, Dict, Union
 
-from fastapi import Request
-
-from app.common.dataclasses.main import AuthData, AuthSessionData, AuthStatus, SubscriptionStatus, GraceConfig
+from app.common.dataclasses.main import AuthData, AuthSessionData, AuthStatus, GraceConfig, SubscriptionStatus
 from app.models.dto.user_team_dto import UserTeamDTO
 from app.repository.subscriptions.subscriptions_repository import SubscriptionsRepository
 from app.repository.user_teams.user_team_repository import UserTeamRepository
@@ -12,7 +10,9 @@ from app.services.auth.auth_factory import AuthFactory
 from app.services.auth.signup.signup_service import SignUp
 
 
-async def get_auth_data(grace_config: GraceConfig, headers: Dict[str, str]) -> Dict[str, Union[AuthData, Dict[str, Any]]]:
+async def get_auth_data(
+    grace_config: GraceConfig, headers: Dict[str, str]
+) -> Dict[str, Union[AuthData, Dict[str, Any]]]:
     """
     Get the auth data from the request
     """
