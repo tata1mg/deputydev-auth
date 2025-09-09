@@ -1,0 +1,63 @@
+{
+    "APP": {
+        "NAME": "DeputyDev Auth Service",
+        "VERSION": "1.0.0",
+        "DESCRIPTION": "DeputyDev Authentication Service",
+        "DEBUG": true,
+        "HOST": "127.0.0.1",
+        "PORT": 8085,
+        "ENVIRONMENT": "local",
+        "SERVERS": [
+            {
+                "url": "http://localhost:8085",
+                "description": "Local Development Server"
+            }
+        ]
+    },
+    "SENTRY": {
+        "DSN": "",
+        "ENVIRONMENT": "",
+        "RELEASE_TAG": "1.0.0",
+        "TRACES_SAMPLE_RATE": 1.0,
+        "DEBUG": true,
+        "ENABLE_LOGS": true
+    },
+    "REDIS": {
+        "HOST": "127.0.0.1",
+        "PORT": 6379
+    },
+    "SUPABASE": {
+        "KEY": "",
+        "URL": "",
+        "JWT_SECRET_KEY": ""
+    },
+    "ENCRYPTION_PASSWORD": "",
+    "SESSION_ENCRYPTION_PASSWORD": "",
+    "BROWSER_HOST": "http://localhost:3000",
+    "FAKE_AUTH": {
+        "ENABLED": false,
+        "USER_EMAIL": "",
+        "USER_NAME": "",
+        "ENCRYPTED_SESSION_DATA": "",
+        "FAKE_BROWSER_HOST": ""
+    },
+    "DB_CREDENTIALS": {
+        "HOST": "",
+        "PORT": 5432,
+        "USER": "",
+        "PASSWORD": "",
+        "DATABASE": ""
+    },
+    "ORG_INFO": {
+        "TATA_1MG": {
+            "domain": "1mg.com",
+            "org_name": "TATA 1mg",
+            "team_id": 1
+        },
+        "TRAYA": {
+            "domain": "traya.com",
+            "org_name": "Traya",
+            "team_id": 3
+        }
+    }
+}

@@ -1,0 +1,27 @@
+[project]
+name = "deputydev-auth"
+version = "1.0.0"
+description = "DeputyDev Authentication Service"
+authors = [{ name = "Deputy Dev", email = "deputydev@1mg.com" }]
+readme = "README.md"
+requires-python = ">=3.13.0 , <3.14.0"
+
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn[standard]==0.32.1",
+  "tortoise-orm[asyncpg]==0.21.7",
+  "pyjwt==2.9.0",
+  "pydantic==2.10.4",
+  "pydantic-settings==2.7.1",
+  "supabase==2.11.0",
+  "toml==0.10.2",
+  "redis==5.2.1",
+  "cryptography>=42.0.0",
+  "sentry-sdk>=2,<3"
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "ruff==0.12.4",
+]
