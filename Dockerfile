@@ -43,7 +43,5 @@ WORKDIR /app
 COPY --from=builder /app /app
 
 # Expose service port
-EXPOSE 8085
-
 # Default command (same startup pattern)
 CMD ["python", "-m", "app.service"]
