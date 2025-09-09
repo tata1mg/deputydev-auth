@@ -1,6 +1,6 @@
 [project]
 name = "deputydev-auth"
-version = "1.0.0"
+version = "0.0.1"
 description = "DeputyDev Authentication Service"
 authors = [{ name = "Deputy Dev", email = "deputydev@1mg.com" }]
 readme = "README.md"
