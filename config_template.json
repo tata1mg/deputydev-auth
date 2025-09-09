@@ -15,8 +15,8 @@
         ]
     },
     "SENTRY": {
-        "DSN": "https://96582ae509974de6be8dc73201a8d834:cea34097563543a4a93d6d474f5164a3@sentry.1mg.com/249",
-        "ENVIRONMENT": "developement",
+        "DSN": "",
+        "ENVIRONMENT": "",
         "RELEASE_TAG": "1.0.0",
         "TRACES_SAMPLE_RATE": 1.0,
         "DEBUG": true,
@@ -27,26 +27,26 @@
         "PORT": 6379
     },
     "SUPABASE": {
-        "KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zd294ZXV6Ymh2c256ZW5ud2ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgwNzQ2MzAsImV4cCI6MjA1MzY1MDYzMH0._Y3HCY1UX7OFTp5wvVfrOjQP9EvmWvfIxWJDJNA88og",
-        "URL": "https://oswoxeuzbhvsnzennwfe.supabase.co",
-        "JWT_SECRET_KEY": "87yBEqkdv9sx13K74GfdzaBZOmhB26nDStOsZ4VP+fGJcqCySJFWSG6w1GiFhyCfgzc4wuWKMYg01aMLtqfd4w=="
+        "KEY": "",
+        "URL": "",
+        "JWT_SECRET_KEY": ""
     },
-    "ENCRYPTION_PASSWORD": "e0453feef04349aebe68447179a264b5",
-    "SESSION_ENCRYPTION_PASSWORD": "e0453feef04349aebainwb717qpa14b8",
+    "ENCRYPTION_PASSWORD": "",
+    "SESSION_ENCRYPTION_PASSWORD": "",
     "BROWSER_HOST": "http://localhost:3000",
     "FAKE_AUTH": {
         "ENABLED": false,
-        "USER_EMAIL": "pratham.verma@1mg.com",
-        "USER_NAME": "Pratham Verma",
-        "ENCRYPTED_SESSION_DATA": "abc",
-        "FAKE_BROWSER_HOST": "www.google.com"
+        "USER_EMAIL": "",
+        "USER_NAME": "",
+        "ENCRYPTED_SESSION_DATA": "",
+        "FAKE_BROWSER_HOST": ""
     },
     "DB_CREDENTIALS": {
-        "HOST": "localhost",
+        "HOST": "",
         "PORT": 5432,
-        "USER": "postgres",
-        "PASSWORD": "123456789",
-        "DATABASE": "deputy_dev1"
+        "USER": "",
+        "PASSWORD": "",
+        "DATABASE": ""
     },
     "ORG_INFO": {
         "TATA_1MG": {
