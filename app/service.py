@@ -10,9 +10,11 @@ ConfigManager.initialize()
 import uvicorn
 from fastapi import FastAPI
 from fastapi.logger import logger
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 from app.listeners.base_listener import close_all_listeners, setup_all_listeners
 from app.routes import __all_routes__
+from app.sentry.sentry import init_sentry
 
 
 @asynccontextmanager
@@ -22,6 +24,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     try:
         # Initialize listeners
         await setup_all_listeners(app)
+        init_sentry(ConfigManager.configs()["SENTRY"])
 
         logger.info(
             f"Service started successfully on {ConfigManager.configs()['APP']['HOST']}:{ConfigManager.configs()['APP']['PORT']}"
@@ -49,6 +52,8 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
         servers=ConfigManager.configs()["APP"]["SERVERS"],
     )
+
+    app.add_middleware(SentryAsgiMiddleware)
 
     # Register routes
     for route in __all_routes__:
@@ -81,7 +86,6 @@ def main() -> None:
             host=ConfigManager.configs()["APP"]["HOST"],
             port=ConfigManager.configs()["APP"]["PORT"],
             reload=ConfigManager.configs()["APP"]["DEBUG"],
-            log_level=ConfigManager.configs()["APP"]["LOG_LEVEL"],
             access_log=True,
             server_header=False,
             date_header=False,

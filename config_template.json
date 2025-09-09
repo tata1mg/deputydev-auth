@@ -6,7 +6,6 @@
         "DEBUG": true,
         "HOST": "127.0.0.1",
         "PORT": 8085,
-        "LOG_LEVEL": "info",
         "ENVIRONMENT": "local",
         "SERVERS": [
             {
@@ -16,9 +15,12 @@
         ]
     },
     "SENTRY": {
-        "DSN": "",
-        "ENVIRONMENT": "production",
-        "RELEASE_TAG": "1.0.0"
+        "DSN": "https://96582ae509974de6be8dc73201a8d834:cea34097563543a4a93d6d474f5164a3@sentry.1mg.com/249",
+        "ENVIRONMENT": "developement",
+        "RELEASE_TAG": "1.0.0",
+        "TRACES_SAMPLE_RATE": 1.0,
+        "DEBUG": true,
+        "ENABLE_LOGS": true
     },
     "REDIS": {
         "HOST": "127.0.0.1",
