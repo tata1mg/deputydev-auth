@@ -1,4 +1,5 @@
-FROM --platform=linux/amd64 python:3.13-slim AS builder
+# syntax=docker/dockerfile:1.7
+FROM python:3.13-slim AS builder
 
 # Environment for reproducible, quiet Python
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -25,8 +26,13 @@ RUN uv sync --frozen
 # Copy the application source
 COPY . .
 
+# Optionally inject a config.json at build-time via BuildKit secret
+# Provide with: --secret id=config_json,src=./config.json
+RUN --mount=type=secret,id=config_json,required=false,dst=/tmp/config.json \
+    if [ -f /tmp/config.json ]; then cp /tmp/config.json /app/config.json; fi
+
 # ---------------- Runtime ----------------
-FROM --platform=linux/amd64 python:3.13-slim AS runtime
+FROM python:3.13-slim AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
