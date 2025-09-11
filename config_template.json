@@ -48,16 +48,14 @@
         "PASSWORD": "",
         "DATABASE": ""
     },
-    "ORG_INFO": {
-        "TATA_1MG": {
-            "domain": "1mg.com",
-            "org_name": "TATA 1mg",
+    "ORG_INFO": [
+        {
+            "domain": "",
+            "org_name": "",
             "team_id": 1
-        },
-        "TRAYA": {
-            "domain": "traya.com",
-            "org_name": "Traya",
-            "team_id": 3
         }
-    }
+    ],
+    "ALLOWED_EMAILS": [
+        "abc@example.com"
+    ]
 }
