@@ -62,7 +62,8 @@ RUN mkdir -p /home/ubuntu/1mg/$SERVICE_NAME/logs
 WORKDIR /home/ubuntu/1mg/$SERVICE_NAME
 
 # Copy and install requirements
-ENV PATH="/.venv/bin:$PATH"
+ENV VIRTUAL_ENV="/home/ubuntu/1mg/$SERVICE_NAME/.venv"
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Bring app and virtualenv from builder
 COPY --from=builder /build /home/ubuntu/1mg/$SERVICE_NAME
