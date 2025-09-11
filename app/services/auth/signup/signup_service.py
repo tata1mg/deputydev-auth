@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional, Tuple
 from tortoise.exceptions import DoesNotExist
 from tortoise.transactions import in_transaction
 
-from app.common.dataclasses.main import Clients, SubscriptionStatus
+from app.common.dataclasses.main import SubscriptionStatus
 from app.common.exception.exception import SignUpError
 from app.models.dao.postgres.referral_codes import ReferralCodes
 from app.models.dao.postgres.referrals import Referrals
@@ -28,9 +28,10 @@ class SignUp:
     async def signup(cls, headers: Dict[str, Any]) -> Dict[str, Any]:
         try:
             referral_code = headers.get("X-Referral-Code")
-            external_auth_client = headers.get("X-External-Auth-Client")
             email = headers.get("X-User-Email")
             username = headers.get("X-User-Name")
+
+            # Referral Code based signup
             if referral_code:
                 is_valid, referral_code_data = await cls.validate_referral_code(referral_code)
                 if is_valid:
@@ -41,13 +42,20 @@ class SignUp:
                     return {"success": True}
                 else:
                     return {"success": False, "error": "Invalid/Expired referral code"}
-            else:
-                email_verification = await cls.get_team_info_from_email(email, external_auth_client)
-                if "error" in email_verification:
-                    return {"success": False, "error": email_verification["error"]}
-                signup_payload = SignUpRequest(username=username, email=email, org_name=email_verification["org_name"])
-                await cls.signup_and_subscribe(signup_payload, email_verification=email_verification)
+
+            # Allowed email based signup
+            if email in ConfigManager.configs()["ALLOWED_EMAILS"]:
+                signup_payload = SignUpRequest(username=username, email=email, org_name=f"{username}'s Organisation")
+                await cls.signup_and_subscribe(signup_payload)
                 return {"success": True}
+
+            # Domain based signup
+            email_verification = await cls.get_team_info_from_email(email)
+            if "error" in email_verification:
+                return {"success": False, "error": email_verification["error"]}
+            signup_payload = SignUpRequest(username=username, email=email, org_name=email_verification["org_name"])
+            await cls.signup_and_subscribe(signup_payload, email_verification=email_verification)
+            return {"success": True}
         except SignUpError:
             # user already exists
             return {"success": True, "is_user_exist": True}
@@ -63,7 +71,7 @@ class SignUp:
             try:
                 user = await Users.get(email=signup_payload.email)
             except DoesNotExist:
-                # good, continue signup
+                # User Does Not Exist Continue Signup
                 user = Users(
                     name=signup_payload.username,
                     email=signup_payload.email,
@@ -84,7 +92,7 @@ class SignUp:
 
                 user_team_id = personal_user_team.id
 
-                # Only for domain or allowed emails based onboarding
+                # Only for domain based signup
                 if not referral_code_data and email_verification:
                     user_team = await UserTeams.create(
                         user_id=user.id,
@@ -130,29 +138,14 @@ class SignUp:
                 raise SignUpError("User already exists")
 
     @classmethod
-    async def get_team_info_from_email(cls, email: str, external_auth_client: Optional[str] = None) -> Dict[str, Any]:
+    async def get_team_info_from_email(cls, email: str) -> Dict[str, Any]:
         domain = email.split("@")[1]
-        if external_auth_client:
-            if Clients(external_auth_client) == Clients.VSCODE_EXT:
-                if domain == ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["domain"]:
-                    return {
-                        "team_id": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["team_id"],
-                        "org_name": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["org_name"],
-                    }
+        orgs = ConfigManager.configs()["ORG_INFO"]
 
-        if domain == ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["domain"]:
-            return {
-                "team_id": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["team_id"],
-                "org_name": ConfigManager.configs()["ORG_INFO"]["TATA_1MG"]["org_name"],
-            }
-
-        elif email in ConfigManager.configs()["ALLOWED_EMAILS"]:
-            return {
-                "team_id": ConfigManager.configs()["ORG_INFO"]["DEPUTYDEV_PRIVATE"]["team_id"],
-                "org_name": ConfigManager.configs()["ORG_INFO"]["DEPUTYDEV_PRIVATE"]["org_name"],
-            }
-        else:
-            return await cls.get_personal_team_info_from_email(email)
+        for org in orgs:
+            if domain == org["domain"]:
+                return {"team_id": org["team_id"], "org_name": org["org_name"]}
+        return await cls.get_personal_team_info_from_email(email)
 
     @classmethod
     async def validate_referral_code(cls, referral_code: str) -> Tuple[bool, Optional[ReferralCodeDTO]]:
