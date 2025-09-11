@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional, Tuple
 from tortoise.exceptions import DoesNotExist
 from tortoise.transactions import in_transaction
 
-from app.common.dataclasses.main import Clients, SubscriptionStatus
+from app.common.dataclasses.main import SubscriptionStatus
 from app.common.exception.exception import SignUpError
 from app.models.dao.postgres.referral_codes import ReferralCodes
 from app.models.dao.postgres.referrals import Referrals
@@ -45,9 +45,7 @@ class SignUp:
 
             # Allowed email based signup
             if email in ConfigManager.configs()["ALLOWED_EMAILS"]:
-                signup_payload = SignUpRequest(
-                        username=username, email=email, org_name=f"{username}'s Organisation"
-                    )
+                signup_payload = SignUpRequest(username=username, email=email, org_name=f"{username}'s Organisation")
                 await cls.signup_and_subscribe(signup_payload)
                 return {"success": True}
 
@@ -146,10 +144,7 @@ class SignUp:
 
         for org in orgs:
             if domain == org["domain"]:
-                return {
-                    "team_id": org["team_id"],
-                    "org_name": org["org_name"]
-                }
+                return {"team_id": org["team_id"], "org_name": org["org_name"]}
         return await cls.get_personal_team_info_from_email(email)
 
     @classmethod
