@@ -1,4 +1,5 @@
 ARG SERVICE_NAME
+ARG USE_CONFIG_FROM_ROOT=false
 
 # ---------------- Builder Stage ----------------
 FROM python:3.13-slim AS builder
@@ -26,20 +27,16 @@ COPY uv.lock pyproject.toml ./
 # Create and populate a local virtual environment
 RUN uv sync
 
-
 # Copy the application source
 COPY . .
 
-# Optionally inject a config.json at build-time via BuildKit secret
-# Provide with: --secret id=config_json,src=./config.json
-# Falls back gracefully when BuildKit is not available
-RUN --mount=type=secret,id=config_json,required=false,dst=/tmp/config.json \
-    if [ -f /tmp/config.json ]; then \
-        cp /tmp/config.json /build/config.json && echo "Config injected via BuildKit secret"; \
-    elif [ -f config.json ]; then \
-        echo "Using config.json from build context"; \
+# Handle config from root conditionally
+RUN if [ "$USE_CONFIG_FROM_ROOT" = "true" ] && [ -f config.json ]; then \
+        echo "✓ Config mode: Using config.json from repo root"; \
+    elif [ "$USE_CONFIG_FROM_ROOT" = "true" ]; then \
+        echo "⚠ USE_CONFIG_FROM_ROOT=true but no config.json found in repo root" && exit 1; \
     else \
-        echo "No config.json found - will use config_template.json if available"; \
+        echo "Standard mode - application will use built-in defaults or runtime config"; \
     fi
 
 # ---------------- Runtime Stage ----------------
