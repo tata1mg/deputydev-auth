@@ -17,7 +17,7 @@ dependencies = [
   "toml==0.10.2",
   "redis==5.2.1",
   "cryptography>=42.0.0",
-  "sentry-sdk==1.45.0",
+  "sentry-sdk==1.45.1",
   "elastic-apm==6.24.0",
 ]
 
