@@ -8,10 +8,12 @@ from app.utils.config_manager import ConfigManager
 ConfigManager.initialize()
 
 import uvicorn
+from elasticapm.contrib.starlette import ElasticAPM
 from fastapi import FastAPI
 from fastapi.logger import logger
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
+from app.apm.apm import get_apm_client
 from app.listeners.base_listener import close_all_listeners, setup_all_listeners
 from app.routes import __all_routes__
 from app.sentry.sentry import init_sentry
@@ -54,6 +56,9 @@ def create_app() -> FastAPI:
     )
 
     app.add_middleware(SentryAsgiMiddleware)
+
+    apm = get_apm_client(apm_config=ConfigManager.configs()["APM"], service_config=ConfigManager.configs()["APP"])
+    app.add_middleware(ElasticAPM, client=apm)
 
     # Register routes
     for route in __all_routes__:
