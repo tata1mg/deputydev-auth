@@ -1,22 +1,22 @@
 import signal
 import sys
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, NoReturn
+from typing import Any, AsyncGenerator, NoReturn
 
 from app.utils.config_manager import ConfigManager
 
 ConfigManager.initialize()
 
-import uvicorn
-from elasticapm.contrib.starlette import ElasticAPM
-from fastapi import FastAPI
-from fastapi.logger import logger
-from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
+import uvicorn  # noqa: E402
+from elasticapm.contrib.starlette import ElasticAPM  # noqa: E402
+from fastapi import FastAPI  # noqa: E402
+from fastapi.logger import logger  # noqa: E402
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware  # noqa: E402
 
-from app.apm.apm import get_apm_client
-from app.listeners.base_listener import close_all_listeners, setup_all_listeners
-from app.routes import __all_routes__
-from app.sentry.sentry import init_sentry
+from app.apm.apm import get_apm_client  # noqa: E402
+from app.listeners.base_listener import close_all_listeners, setup_all_listeners  # noqa: E402
+from app.routes import __all_routes__  # noqa: E402
+from app.sentry.sentry import init_sentry  # noqa: E402
 
 
 @asynccontextmanager
@@ -37,7 +37,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         try:
             # Close listeners in reverse order
             await close_all_listeners()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Error during shutdown: {e}")
         logger.info("Service shutdown complete")
 
@@ -67,7 +67,7 @@ def create_app() -> FastAPI:
     return app
 
 
-def signal_handler(signum: int, frame) -> NoReturn:
+def signal_handler(signum: int, frame: Any) -> NoReturn:
     """
     Graceful shutdown signal handler.
     """
@@ -99,7 +99,7 @@ def main() -> None:
     except KeyboardInterrupt:
         logger.info("Service interrupted by user")
         sys.exit(0)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.error(f"Failed to start service: {e}", exc_info=True)
         sys.exit(1)
 
