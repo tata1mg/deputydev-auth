@@ -11,7 +11,7 @@ from sentry_sdk.integrations.starlette import StarletteIntegration
 def init_sentry(sentry_config: Dict[str, Any]) -> None:
     if not sentry_config["DSN"]:
         return
-    
+
     event_level = logging.WARNING if sentry_config.get("CAPTURE_WARNING") else logging.ERROR
     integrations = [
         StarletteIntegration(transaction_style="endpoint"),
