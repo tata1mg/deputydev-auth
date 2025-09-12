@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 from app.utils.singleton import Singleton
@@ -15,7 +16,7 @@ class ConfigManager(metaclass=Singleton):
         """
         config = None
         try:
-            with open(_file) as config_file:
+            with Path.open(_file) as config_file:
                 config = json.load(config_file)
         except (TypeError, FileNotFoundError, ValueError):
             pass
@@ -43,7 +44,7 @@ class ConfigManager(metaclass=Singleton):
         cls.config.update(values)
         if not cls.in_memory:
             try:
-                with open(cls.config_path, "w") as config_file:
+                with Path.open(cls.config_path, "w") as config_file:
                     json.dump(cls.config, config_file, indent=4)
             except (TypeError, FileNotFoundError, ValueError):
                 pass

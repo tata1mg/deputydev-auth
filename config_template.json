@@ -14,11 +14,18 @@
             }
         ]
     },
+    "APM": {
+        "ENABLED": true,
+        "ENVIRONMENT": "production",
+        "SECRET_TOKEN": "FAKE_SECRET",
+        "SERVER_TIMEOUT": "30s",
+        "SERVER_URL": "FAKE_URL",
+        "SPAN_FRAMES_MIN_DURATION": "10ms",
+        "TRANSACTION_SAMPLE_RATE": 0.1
+    },
     "SENTRY": {
         "DSN": "",
         "ENVIRONMENT": "",
-        "RELEASE_TAG": "1.0.0",
-        "TRACES_SAMPLE_RATE": 1.0,
         "DEBUG": true,
         "ENABLE_LOGS": true
     },
