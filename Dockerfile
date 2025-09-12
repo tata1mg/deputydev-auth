@@ -2,7 +2,7 @@ ARG SERVICE_NAME
 ARG USE_CONFIG_FROM_ROOT=false
 
 # ---------------- Builder Stage ----------------
-FROM python:3.13-slim AS builder
+FROM python:3.12-slim AS builder
 
 # Environment for reproducible, quiet Python
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -40,7 +40,7 @@ RUN if [ "$USE_CONFIG_FROM_ROOT" = "true" ] && [ -f config.json ]; then \
     fi
 
 # ---------------- Runtime Stage ----------------
-FROM python:3.13-slim AS runtime
+FROM python:3.12-slim AS runtime
 
 ARG SERVICE_NAME
 
