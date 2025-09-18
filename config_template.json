@@ -34,19 +34,19 @@
         "PORT": 6379
     },
     "SUPABASE": {
-        "KEY": "",
-        "URL": "",
-        "JWT_SECRET_KEY": ""
+        "KEY": "FAKE_KEY",
+        "URL": "FAKE_URL",
+        "JWT_SECRET_KEY": "FAKE_JWT_KEY"
     },
     "ENCRYPTION_PASSWORD": "",
     "SESSION_ENCRYPTION_PASSWORD": "",
     "BROWSER_HOST": "http://localhost:3000",
     "FAKE_AUTH": {
-        "ENABLED": false,
-        "USER_EMAIL": "",
-        "USER_NAME": "",
-        "ENCRYPTED_SESSION_DATA": "",
-        "FAKE_BROWSER_HOST": ""
+        "ENABLED": true,
+        "USER_EMAIL": "fake-user@example.com",
+        "USER_NAME": "Fake User",
+        "ENCRYPTED_SESSION_DATA": "ABC123XYZ==",
+        "FAKE_BROWSER_HOST": "localhost"
     },
     "DB_CREDENTIALS": {
         "HOST": "127.0.0.1",

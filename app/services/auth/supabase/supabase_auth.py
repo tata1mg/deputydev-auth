@@ -24,7 +24,8 @@ class SupabaseAuth(BaseAuth):
     defined in the BaseAuth class.
     """
 
-    supabase = SupabaseClient.get_instance()
+    def __init__(self):
+        self.supabase = SupabaseClient.get_instance()
 
     async def update_session_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Update session data with user information from the access token.
