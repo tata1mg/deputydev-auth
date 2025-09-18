@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict
 
 from app.common.dataclasses.main import AuthSessionData, AuthStatus, GraceConfig
@@ -10,7 +11,7 @@ from app.repository.users.user_repository import UserRepository
 from app.services.auth.base_auth import BaseAuth
 from app.utils.config_manager import ConfigManager
 
-from datetime import datetime
+
 class FakeAuth(BaseAuth):
     async def _create_user_if_not_exists(self) -> None:
         # Check if FAKE user is in DB, if not create one
@@ -24,7 +25,7 @@ class FakeAuth(BaseAuth):
                 org_name=ConfigManager.configs()["FAKE_AUTH"]["USER_ORG_NAME"],
             )
             fake_user = user
-    
+
         fake_team = await Teams.filter(name=ConfigManager.configs()["FAKE_AUTH"]["USER_ORG_NAME"]).first()
         if not fake_team:
             team = await Teams.create(
@@ -32,9 +33,7 @@ class FakeAuth(BaseAuth):
             )
             fake_team = team
 
-        fake_user_team = await UserTeams.filter(
-            user_id=fake_user.id, team_id=fake_team.id
-        ).first()
+        fake_user_team = await UserTeams.filter(user_id=fake_user.id, team_id=fake_team.id).first()
         if not fake_user_team:
             user_team = await UserTeams.create(
                 user_id=fake_user.id,
@@ -42,7 +41,7 @@ class FakeAuth(BaseAuth):
                 role="admin",
                 is_owner=True,
                 is_billable=False,
-                last_pr_authored_or_reviewed_at=datetime.now()
+                last_pr_authored_or_reviewed_at=datetime.now(),
             )
             fake_user_team = user_team
 
@@ -59,7 +58,7 @@ class FakeAuth(BaseAuth):
                 plan_id=fake_subscription_plan.id,
                 user_team_id=fake_user_team.id,
                 current_status="ACTIVE",
-                start_date=datetime.now()
+                start_date=datetime.now(),
             )
 
     async def get_auth_session(self, headers: Dict[str, str]) -> AuthSessionData:
