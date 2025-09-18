@@ -5,11 +5,11 @@
         "DESCRIPTION": "DeputyDev Authentication Service",
         "DEBUG": true,
         "HOST": "127.0.0.1",
-        "PORT": 8085,
+        "PORT": 9355,
         "ENVIRONMENT": "local",
         "SERVERS": [
             {
-                "url": "http://localhost:8085",
+                "url": "http://localhost:9355",
                 "description": "Local Development Server"
             }
         ]
@@ -49,11 +49,11 @@
         "FAKE_BROWSER_HOST": ""
     },
     "DB_CREDENTIALS": {
-        "HOST": "",
+        "HOST": "127.0.0.1",
         "PORT": 5432,
-        "USER": "",
-        "PASSWORD": "",
-        "DATABASE": ""
+        "USER": "postgres",
+        "PASSWORD": "password",
+        "DATABASE": "deputydev-postgres"
     },
     "ORG_INFO": [
         {
