@@ -24,7 +24,8 @@ class SupabaseAuth(BaseAuth):
     defined in the BaseAuth class.
     """
 
-    supabase = SupabaseClient.get_instance()
+    def __init__(self) -> None:
+        self.supabase = SupabaseClient.get_instance()
 
     async def update_session_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Update session data with user information from the access token.
@@ -169,7 +170,7 @@ class SupabaseAuth(BaseAuth):
             raise jwt.ExpiredSignatureError("The token has expired.")
         except jwt.InvalidTokenError:
             raise jwt.InvalidTokenError("Invalid token.")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             raise ValueError(f"Token validation failed: {str(e)}")
 
     async def is_grace_period_available(self, access_token: str) -> bool:
@@ -227,7 +228,7 @@ class SupabaseAuth(BaseAuth):
             # return the refreshed session data
             refreshed_session = SessionEncryptionService.encrypt(json.dumps(session_data))
             return RefreshedSessionData(refreshed_session=refreshed_session, user_email=user_email, user_name=user_name)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             raise ValueError(f"Error refreshing session: {str(e)}")
 
     async def validate_session(
@@ -278,7 +279,7 @@ class SupabaseAuth(BaseAuth):
                     user_email=refreshed_session_data.user_email,
                     user_name=refreshed_session_data.user_name,
                 )
-            except Exception as _ex:
+            except Exception as _ex:  # noqa: BLE001
                 return AuthSessionData(
                     status=AuthStatus.NOT_VERIFIED,
                     error_message=str(_ex),
@@ -289,7 +290,7 @@ class SupabaseAuth(BaseAuth):
                 status=AuthStatus.NOT_VERIFIED,
                 error_message="Invalid token format.",
             )
-        except Exception as _ex:
+        except Exception as _ex:  # noqa: BLE001
             return AuthSessionData(
                 status=AuthStatus.NOT_VERIFIED,
                 error_message=str(_ex),
@@ -316,7 +317,7 @@ class SupabaseAuth(BaseAuth):
         try:
             use_grace_period = grace_config.use_grace_period or False
             enable_grace_period = grace_config.enable_grace_period or False
-        except Exception:
+        except Exception:  # noqa: BLE001
             pass
 
         # decode encrypted session data and get the supabase access token
