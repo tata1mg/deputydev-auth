@@ -57,8 +57,12 @@ def create_app() -> FastAPI:
 
     app.add_middleware(SentryAsgiMiddleware)
 
-    apm = get_apm_client(apm_config=ConfigManager.configs()["APM"], service_config=ConfigManager.configs()["APP"])
-    app.add_middleware(ElasticAPM, client=apm)
+    # Only enable APM if it's configured and enabled
+    apm_config = ConfigManager.configs()["APM"]
+    if apm_config.get("ENABLED", False) and apm_config.get("SERVER_URL"):
+        apm = get_apm_client(apm_config=apm_config, service_config=ConfigManager.configs()["APP"])
+        app.add_middleware(ElasticAPM, client=apm)
+        logger.info("APM monitoring enabled")
 
     # Register routes
     for route in __all_routes__:

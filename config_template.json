@@ -4,7 +4,7 @@
         "VERSION": "1.0.0",
         "DESCRIPTION": "DeputyDev Authentication Service",
         "DEBUG": true,
-        "HOST": "127.0.0.1",
+        "HOST": "0.0.0.0",
         "PORT": 9355,
         "ENVIRONMENT": "local",
         "SERVERS": [
@@ -15,7 +15,7 @@
         ]
     },
     "APM": {
-        "ENABLED": true,
+        "ENABLED": false,
         "ENVIRONMENT": "production",
         "SECRET_TOKEN": "FAKE_SECRET",
         "SERVER_TIMEOUT": "30s",
@@ -30,7 +30,7 @@
         "ENABLE_LOGS": true
     },
     "REDIS": {
-        "HOST": "127.0.0.1",
+        "HOST": "deputydev-redis",
         "PORT": 6379
     },
     "SUPABASE": {
@@ -46,10 +46,12 @@
         "USER_EMAIL": "fake-user@example.com",
         "USER_NAME": "Fake User",
         "ENCRYPTED_SESSION_DATA": "ABC123XYZ==",
-        "FAKE_BROWSER_HOST": "localhost"
+        "FAKE_BROWSER_HOST": "localhost",
+        "SUBSCRIPTION_PLAN": "free",
+        "USER_ORG_NAME": "Fake Organization"
     },
     "DB_CREDENTIALS": {
-        "HOST": "127.0.0.1",
+        "HOST": "deputydev-postgres",
         "PORT": 5432,
         "USER": "postgres",
         "PASSWORD": "password",
